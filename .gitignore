@@ -1,0 +1,5 @@
+﻿/winsocat/obj/
+/winsocat/bin/
+/Tests/obj
+/Tests/bin
+*.user
