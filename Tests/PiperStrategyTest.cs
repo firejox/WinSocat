@@ -53,7 +53,7 @@ public class PiperStrategyTest
         public void Dispose() {}
     }
 
-    public class EchoPiperFactory : PiperFactory
+    public class EchoPiperFactory : IPiperFactory
     {
         public IPiper NewPiper() => new EchoPiper(new Pipe());
     }

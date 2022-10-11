@@ -8,7 +8,7 @@ public class StdPiperInfo
     }
 }
 
-public class StdPiperFactory : PiperFactory
+public class StdPiperFactory : IPiperFactory
 {
     public IPiper NewPiper()
     {

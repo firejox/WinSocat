@@ -1,5 +1,4 @@
 ﻿using System.IO.Pipelines;
-using System.Xml;
 
 namespace APP;
 
@@ -92,10 +91,8 @@ public class PairedStreamPiper : Piper
         {
             if (disposing)
             {
-                if (_readStream != null)
-                    _readStream.Dispose();
-                if (_writeStream != null)
-                    _writeStream.Dispose();
+                _readStream?.Dispose();
+                _writeStream?.Dispose();
             }
         }
         finally

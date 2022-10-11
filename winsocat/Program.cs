@@ -13,7 +13,7 @@ namespace APP
             rootCommand.Add(arg1);
             rootCommand.Add(arg2);
             
-            rootCommand.SetHandler(async (string address1, string address2) =>
+            rootCommand.SetHandler(async (address1, address2) =>
             {
                 var strategy = PiperStrategyParse(address1);
                 
@@ -36,14 +36,13 @@ namespace APP
             await rootCommand.InvokeAsync(args);
         }
 
-        public static IPiperStrategy PiperStrategyParse(string input)
+        private static IPiperStrategy PiperStrategyParse(string input)
         {
+            IPiperStrategy strategy = null!;
             AddressElement element = AddressElement.TryParse(input);
 
             if (element == null)
-                return null!;
-            
-            IPiperStrategy strategy;
+                return strategy;
 
             if ((strategy = StdPiperStrategy.TryParse(element)) != null)
                 return strategy;
@@ -64,17 +63,17 @@ namespace APP
             if ((strategy = WslPiperStrategy.TryParse(element)) != null)
                 return strategy;
 
-            return null!;
+            return strategy!;
         }
 
-        public static PiperFactory PiperFactoryParse(string input)
+        private static IPiperFactory PiperFactoryParse(string input)
         {
+            IPiperFactory factory = null!;
+            
             var element = AddressElement.TryParse(input);
 
             if (element == null)
-                return null!;
-            
-            PiperFactory factory;
+                return factory;
 
             if ((factory = StdPiperFactory.TryParse(element)) != null)
                 return factory;
@@ -91,7 +90,7 @@ namespace APP
             if ((factory = WslPiperFactory.TryParse(element)) != null)
                 return factory;
             
-            return null!;
+            return factory!;
         }
 
     }

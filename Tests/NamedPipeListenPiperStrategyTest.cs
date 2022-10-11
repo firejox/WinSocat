@@ -21,7 +21,7 @@ public class NamedPipeListenPiperStrategyTest
         public void Dispose() {}
     }
 
-    class EchoPiperFactory : PiperFactory
+    class EchoPiperFactory : IPiperFactory
     {
         public IPiper NewPiper() => new EchoPiper();
     }

@@ -9,7 +9,7 @@ public class TcpListenPiperTest
 {
     class EchoPiper : IPiper
     {
-        private Pipe _pipe;
+        private readonly Pipe _pipe;
 
         public EchoPiper()
         {
@@ -22,7 +22,7 @@ public class TcpListenPiperTest
         public void Dispose() {}
     }
 
-    class EchoPiperFactory : PiperFactory
+    class EchoPiperFactory : IPiperFactory
     {
         public IPiper NewPiper() => new EchoPiper();
     }

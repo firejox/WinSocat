@@ -1,18 +1,15 @@
-﻿
-using System.Net;
-
-namespace APP;
+﻿namespace APP;
 
 public class WslPiperInfo
 {
-    private static bool WslCheck = File.Exists(@"C:\Windows\System32\wsl.exe");
-    private string _command;
+    private static readonly bool WslCheck = File.Exists(@"C:\Windows\System32\wsl.exe");
+    private readonly string _command;
     public string Command => _command;
 
-    private string _distribution;
+    private readonly string _distribution;
     public string Distribution => _distribution;
 
-    private string _user;
+    private readonly string _user;
     public string User => _user;
 
     public WslPiperInfo(string command, string distribution, string user)
@@ -52,17 +49,17 @@ public class WslPiperInfo
         string distribution;
         string user;
 
-        if (!element.Options.TryGetValue("distribution", out distribution))
+        if (!element.Options.TryGetValue("distribution", out distribution!))
             distribution = "";
 
-        if (!element.Options.TryGetValue("user", out user))
+        if (!element.Options.TryGetValue("user", out user!))
             user = "";
 
         return new WslPiperInfo(command, distribution, user);
     }
 }
 
-public class WslPiperFactory
+public static class WslPiperFactory
 {
     public static ProcPiperFactory TryParse(AddressElement element)
     {
@@ -74,7 +71,7 @@ public class WslPiperFactory
     }
 }
 
-public class WslPiperStrategy
+public static class WslPiperStrategy
 {
     public static ProcPiperStrategy TryParse(AddressElement element)
     {

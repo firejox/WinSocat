@@ -1,6 +1,6 @@
 ﻿namespace APP;
 
-public interface PiperFactory
+public interface IPiperFactory
 {
     public IPiper NewPiper();
 }

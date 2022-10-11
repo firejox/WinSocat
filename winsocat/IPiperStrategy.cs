@@ -2,8 +2,8 @@
 
 public interface IPiperStrategy
 {
-    public void Execute(PiperFactory factory);
-    public Task ExecuteAsync(PiperFactory factory, CancellationToken token = default);
+    public void Execute(IPiperFactory factory);
+    public Task ExecuteAsync(IPiperFactory factory, CancellationToken token = default);
 }
 
 
@@ -11,7 +11,7 @@ public abstract class PiperStrategy : IPiperStrategy
 {
     protected abstract IPiper NewPiper();
 
-    public virtual void Execute(PiperFactory factory)
+    public virtual void Execute(IPiperFactory factory)
     {
         using (var srcPiper = NewPiper())
         {
@@ -22,7 +22,7 @@ public abstract class PiperStrategy : IPiperStrategy
         }
     }
 
-    public virtual async Task ExecuteAsync(PiperFactory factory, CancellationToken token = default)
+    public virtual async Task ExecuteAsync(IPiperFactory factory, CancellationToken token = default)
     {
         using (var srcPiper = NewPiper())
         {
@@ -38,14 +38,14 @@ public abstract class ListenPiperStrategy : IPiperStrategy
 {
     protected abstract IListenPiper NewListenPiper();
 
-    public virtual void Execute(PiperFactory factory)
+    public virtual void Execute(IPiperFactory factory)
     {
         using (var listenPiper = NewListenPiper())
         {
             while (true)
             {
                 var srcPiper = listenPiper.NewIncomingPiper();
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     using (srcPiper)
                     {
@@ -58,8 +58,8 @@ public abstract class ListenPiperStrategy : IPiperStrategy
             }
         }
     }
-
-    public virtual async Task ExecuteAsync(PiperFactory factory, CancellationToken token = default)
+    
+    public virtual async Task ExecuteAsync(IPiperFactory factory, CancellationToken token = default)
     {
         using (var listenPiper = NewListenPiper())
         {
@@ -67,8 +67,7 @@ public abstract class ListenPiperStrategy : IPiperStrategy
             while (true)
             {
                 var srcPiper = await listenPiper.NewIncomingPiperAsync();
-                
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
                     using (srcPiper)
                     {

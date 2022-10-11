@@ -17,24 +17,21 @@ public class NamedPipeStreamPiperInfo
     }
     public static NamedPipeStreamPiperInfo TryParse(AddressElement element)
     {
-        if (element.Tag.Equals("NPIPE", StringComparison.OrdinalIgnoreCase))
-        {
-            string serverName;
-            string pipeName;
+        if (!element.Tag.Equals("NPIPE", StringComparison.OrdinalIgnoreCase)) return null!;
+        
+        string serverName;
+        string pipeName;
 
-            int sepIndex = element.Address.LastIndexOf(':');
+        int sepIndex = element.Address.LastIndexOf(':');
 
-            if (sepIndex == 0 || sepIndex == -1)
-                serverName = ".";
-            else
-                serverName = element.Address.Substring(0, sepIndex);
+        if (sepIndex == 0 || sepIndex == -1)
+            serverName = ".";
+        else
+            serverName = element.Address.Substring(0, sepIndex);
 
-            pipeName = element.Address.Substring(sepIndex + 1);
+        pipeName = element.Address.Substring(sepIndex + 1);
 
-            return new NamedPipeStreamPiperInfo(serverName, pipeName);
-        }
-
-        return null!;
+        return new NamedPipeStreamPiperInfo(serverName, pipeName);
     }
 }
 
@@ -57,7 +54,7 @@ public class NamedPipeListenPiperInfo
     }
 }
 
-public class NamedPipeStreamPiperFactory : PiperFactory
+public class NamedPipeStreamPiperFactory : IPiperFactory
 {
     private readonly NamedPipeStreamPiperInfo _info;
     public NamedPipeStreamPiperInfo Info => _info;

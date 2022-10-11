@@ -19,22 +19,19 @@ public class TcpStreamPiperInfo
 
     public static TcpStreamPiperInfo TryParse(AddressElement element)
     {
-        if (element.Tag.Equals("TCP", StringComparison.OrdinalIgnoreCase))
-        {
-            string host;
-            int sepIndex = element.Address.LastIndexOf(':');
+        if (!element.Tag.Equals("TCP", StringComparison.OrdinalIgnoreCase)) return null!;
+        
+        string host;
+        int sepIndex = element.Address.LastIndexOf(':');
 
-            if (sepIndex == -1 || sepIndex == 0)
-                host = "0.0.0.0";
-            else
-                host = element.Address.Substring(0, sepIndex);
+        if (sepIndex == -1 || sepIndex == 0)
+            host = "0.0.0.0";
+        else
+            host = element.Address.Substring(0, sepIndex);
             
-            int port = Int32.Parse(element.Address.Substring(sepIndex + 1));
+        int port = Int32.Parse(element.Address.Substring(sepIndex + 1));
 
-            return new TcpStreamPiperInfo(host, port);
-        }
-
-        return null!;
+        return new TcpStreamPiperInfo(host, port);
     }
 }
 
@@ -201,7 +198,7 @@ public class TcpStreamPiper : StreamPiper
     }
 }
 
-public class TcpStreamPiperFactory : PiperFactory
+public class TcpStreamPiperFactory : IPiperFactory
 {
     private readonly TcpStreamPiperInfo _info;
     public TcpStreamPiperInfo Info => _info;

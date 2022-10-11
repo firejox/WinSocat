@@ -19,28 +19,25 @@ public class ProcPiperInfo
 
     public static ProcPiperInfo TryParse(AddressElement element)
     {
-        if (element.Tag.Equals("EXEC", StringComparison.OrdinalIgnoreCase))
+        if (!element.Tag.Equals("EXEC", StringComparison.OrdinalIgnoreCase)) return null!;
+        
+        string execPattern = element.Address.Trim('\'', '\"');
+        int sepIndex = execPattern.IndexOf(' ');
+        string filename;
+        string arguments;
+
+        if (sepIndex != -1)
         {
-            string execPattern = element.Address.Trim('\'', '\"');
-            int sepIndex = execPattern.IndexOf(' ');
-            string filename;
-            string arguments;
-
-            if (sepIndex != -1)
-            {
-                filename = execPattern.Substring(0, sepIndex);
-                arguments = execPattern.Substring(sepIndex + 1);
-            }
-            else
-            {
-                filename = execPattern;
-                arguments = "";
-            }
-
-            return new ProcPiperInfo(filename, arguments);
+            filename = execPattern.Substring(0, sepIndex);
+            arguments = execPattern.Substring(sepIndex + 1);
+        }
+        else
+        {
+            filename = execPattern;
+            arguments = "";
         }
 
-        return null!;
+        return new ProcPiperInfo(filename, arguments);
     }
 }
 
@@ -91,7 +88,7 @@ public class ProcPiper : IPiper
     }
 }
 
-public class ProcPiperFactory : PiperFactory
+public class ProcPiperFactory : IPiperFactory
 {
     private readonly ProcPiperInfo _info;
 
