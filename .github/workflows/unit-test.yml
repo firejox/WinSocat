@@ -24,3 +24,4 @@ jobs:
           run: dotnet build --no-restore
         - name: Run unit tests
           run: dotnet test --no-build
+          

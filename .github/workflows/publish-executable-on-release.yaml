@@ -1,0 +1,31 @@
+﻿name: Publish Executable on Release
+
+on:
+  release:
+    types: [published]
+    
+jobs:
+  build_and_publish:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .Net 6.0
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0'
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Publish program into build folder
+        run: dotnet publish winsocat -c Release -o build
+      - name: Zip build folder
+        run: 7z a -tzip winsocat.zip build
+      - name: Upload program
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          upload_url: ${{github.event.release.upload_url}}
+          asset_path: ./winsocat.zip
+          asset_name: winsocat.zip
+          asset_content_type: application/zip
+          
