@@ -1,0 +1,26 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build_and_test:
+    runs-on: windows-latest
+    steps:
+        - uses: actions/checkout@v3
+        - name: Setup .Net 6.0
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '6.0'
+        - name: Install dependencies
+          run: dotnet restore
+        - name: Build
+          run: dotnet build --no-restore
+        - name: Run unit tests
+          run: dotnet test --no-build
