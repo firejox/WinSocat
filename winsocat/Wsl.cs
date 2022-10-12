@@ -2,7 +2,7 @@
 
 public class WslPiperInfo
 {
-    private static readonly bool WslCheck = File.Exists(@"C:\Windows\System32\wsl.exe");
+    private static readonly bool WslCheck = File.Exists(Path.Join(Environment.SystemDirectory, "wsl.exe"));
     private readonly string _command;
     public string Command => _command;
 
