@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace APP
+namespace Firejox.App.WinSocat
 {
     public static class Program
     {

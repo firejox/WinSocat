@@ -1,6 +1,6 @@
 ﻿using System.IO.Pipes;
 
-namespace APP;
+namespace Firejox.App.WinSocat;
 
 public class NamedPipeStreamPiperInfo
 {

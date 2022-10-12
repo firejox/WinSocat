@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using APP;
+using Firejox.App.WinSocat;
 
 namespace APPTest;
 
@@ -11,7 +11,7 @@ public class TcpListenPiperInfoTest
     public void ValidInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.NotNull(APP.TcpListenPiperInfo.TryParse(element));
+        Assert.NotNull(Firejox.App.WinSocat.TcpListenPiperInfo.TryParse(element));
     }
 
     [TestCase("TCP-LISTEN:127.0.0.1:80")]
@@ -19,7 +19,7 @@ public class TcpListenPiperInfoTest
     public void CaseInsensitiveValidInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.NotNull(APP.TcpListenPiperInfo.TryParse(element));
+        Assert.NotNull(Firejox.App.WinSocat.TcpListenPiperInfo.TryParse(element));
     }
 
     [TestCase("STDIO")]
@@ -30,14 +30,14 @@ public class TcpListenPiperInfoTest
     public void InvalidInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.Null(APP.TcpListenPiperInfo.TryParse(element));
+        Assert.Null(Firejox.App.WinSocat.TcpListenPiperInfo.TryParse(element));
     }
 
     [TestCaseSource(nameof(AddressCases))]
     public void AddressPatternMatchParseTest(string input, IPAddress expect)
     {
         var element = AddressElement.TryParse(input);
-        Assert.That(APP.TcpListenPiperInfo.TryParse(element).Address, Is.EqualTo(expect));
+        Assert.That(Firejox.App.WinSocat.TcpListenPiperInfo.TryParse(element).Address, Is.EqualTo(expect));
     }
 
     private static object[] AddressCases =
@@ -53,6 +53,6 @@ public class TcpListenPiperInfoTest
     public int PortPatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        return APP.TcpListenPiperInfo.TryParse(element).Port;
+        return Firejox.App.WinSocat.TcpListenPiperInfo.TryParse(element).Port;
     }
 }

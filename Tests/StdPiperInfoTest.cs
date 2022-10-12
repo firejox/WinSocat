@@ -1,4 +1,4 @@
-using APP;
+using Firejox.App.WinSocat;
 
 namespace APPTest;
 
@@ -9,7 +9,7 @@ public class StdPiperInfoTest
     public void VaildInputCheckTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.IsTrue(APP.StdPiperInfo.Check(element));
+        Assert.IsTrue(Firejox.App.WinSocat.StdPiperInfo.Check(element));
     }
 
     [TestCase("STDIO")]
@@ -17,7 +17,7 @@ public class StdPiperInfoTest
     public void CaseInsensitiveValidInputCheckTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.IsTrue(APP.StdPiperInfo.Check(element));
+        Assert.IsTrue(Firejox.App.WinSocat.StdPiperInfo.Check(element));
     }
 
     [TestCase("TCP:127.0.0.1:80")]
@@ -28,6 +28,6 @@ public class StdPiperInfoTest
     public void InvalidInputCheckTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.IsFalse(APP.StdPiperInfo.Check(element));
+        Assert.IsFalse(Firejox.App.WinSocat.StdPiperInfo.Check(element));
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.IO.Pipelines;
 
-namespace APP;
+namespace Firejox.App.WinSocat;
 
 public interface IPiper : IDisposable
 {

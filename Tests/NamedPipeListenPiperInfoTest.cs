@@ -1,4 +1,4 @@
-﻿using APP;
+﻿using Firejox.App.WinSocat;
 
 namespace APPTest;
 
@@ -8,7 +8,7 @@ public class NamedPipeListenPiperInfoTest
     public void VaildInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.NotNull(APP.NamedPipeListenPiperInfo.TryParse(element));
+        Assert.NotNull(Firejox.App.WinSocat.NamedPipeListenPiperInfo.TryParse(element));
     }
 
     [TestCase("NPIPE-LISTEN:fooPipe")]
@@ -16,7 +16,7 @@ public class NamedPipeListenPiperInfoTest
     public void CaseInsensitiveValidInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.NotNull(APP.NamedPipeListenPiperInfo.TryParse(element));
+        Assert.NotNull(Firejox.App.WinSocat.NamedPipeListenPiperInfo.TryParse(element));
     }
     
     [TestCase("STDIO")]
@@ -27,13 +27,13 @@ public class NamedPipeListenPiperInfoTest
     public void InvalidInputParseTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        Assert.Null(APP.NamedPipeListenPiperInfo.TryParse(element));
+        Assert.Null(Firejox.App.WinSocat.NamedPipeListenPiperInfo.TryParse(element));
     }
 
     [TestCase("NPIPE-LISTEN:fooPipe", ExpectedResult = "fooPipe")]
     public string PipePatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        return APP.NamedPipeListenPiperInfo.TryParse(element).PipeName;
+        return Firejox.App.WinSocat.NamedPipeListenPiperInfo.TryParse(element).PipeName;
     }
 }

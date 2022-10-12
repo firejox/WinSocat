@@ -2,12 +2,17 @@
 
 on:
   release:
-    types: [published]
+    types: [published, released]
     
 jobs:
   build_and_publish:
     runs-on: windows-latest
     steps:
+      - name: Obtain release semantic version
+        id: semver
+        uses: Steffo99/actions-semver@v0.3.4
+        with:
+          string: ${{ github.event.release.tag_name }}
       - uses: actions/checkout@v3
       - name: Setup .Net 6.0
         uses: actions/setup-dotnet@v3
@@ -15,17 +20,18 @@ jobs:
           dotnet-version: '6.0'
       - name: Install dependencies
         run: dotnet restore
-      - name: Publish program into build folder
-        run: dotnet publish winsocat -c Release -o build
-      - name: Zip build folder
-        run: 7z a -tzip winsocat.zip build
-      - name: Upload program
+      - name: Build WinSocat
+        run: dotnet build -c Release --no-restore -p:Version=${{ steps.semver.outputs.core }} --version-suffix ${{ steps.semver.outputs.prerelease }}
+      - name: Pack WinSocat into nuget package
+        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{github.event.release.tag_name}} --version-suffix "${{ steps.semver.outputs.prerelease }}"
+      - name: Upload package to release assets
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{github.event.release.upload_url}}
-          asset_path: ./winsocat.zip
-          asset_name: winsocat.zip
-          asset_content_type: application/zip
-          
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./winsocat.${{ steps.semver.outputs.core }}.nupkg
+          asset_name: winsocat.${{ steps.semver.outputs.core }}.nupkg
+          asset_content_type: application/octet-stream
+      - name: Push package to nuget.org
+        run:  dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json

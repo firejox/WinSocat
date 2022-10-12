@@ -1,4 +1,4 @@
-﻿using APP;
+﻿using Firejox.App.WinSocat;
 using System.IO.Pipelines;
 using System.IO.Pipes;
 using System.Net;
@@ -135,7 +135,7 @@ public class PiperStrategyTest
         
         serverThread.Start();
 
-        var factory = APP.TcpStreamPiperFactory.TryParse(AddressElement.TryParse("TCP:127.0.0.1:10000"));
+        var factory = Firejox.App.WinSocat.TcpStreamPiperFactory.TryParse(AddressElement.TryParse("TCP:127.0.0.1:10000"));
         
         Task.Run(async () =>
         {

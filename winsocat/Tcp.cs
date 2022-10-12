@@ -1,7 +1,7 @@
 ﻿using System.Net.Sockets;
 using System.Net;
 
-namespace APP;
+namespace Firejox.App.WinSocat;
 
 public class TcpStreamPiperInfo
 {

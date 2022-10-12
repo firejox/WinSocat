@@ -1,4 +1,4 @@
-﻿namespace APP;
+﻿namespace Firejox.App.WinSocat;
 
 public class StdPiperInfo
 {
