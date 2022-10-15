@@ -23,7 +23,7 @@ jobs:
       - name: Build WinSocat
         run: dotnet build -c Release --no-restore -p:Version=${{ steps.semver.outputs.core }} --version-suffix ${{ steps.semver.outputs.prerelease }}
       - name: Pack WinSocat into nuget package
-        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{github.event.release.tag_name}} --version-suffix "${{ steps.semver.outputs.prerelease }}"
+        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{ steps.semver.outputs.core }} --version-suffix ${{ steps.semver.outputs.prerelease }}
       - name: Upload package to release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -34,4 +34,4 @@ jobs:
           asset_name: winsocat.${{ steps.semver.outputs.core }}.nupkg
           asset_content_type: application/octet-stream
       - name: Push package to nuget.org
-        run:  dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} -Source https://api.nuget.org/v3/index.json
+        run:  dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
