@@ -63,6 +63,11 @@ namespace Firejox.App.WinSocat
             if ((strategy = WslPiperStrategy.TryParse(element)) != null)
                 return strategy;
 
+            if ((strategy = UnixSocketStreamPiperStrategy.TryParse(element)) != null)
+                return strategy;
+            if ((strategy = UnixSocketListenPiperStrategy.TryParse(element)) != null)
+                return strategy;
+
             return strategy!;
         }
 
@@ -88,6 +93,9 @@ namespace Firejox.App.WinSocat
                 return factory;
 
             if ((factory = WslPiperFactory.TryParse(element)) != null)
+                return factory;
+
+            if ((factory = UnixSocketStreamPiperFactory.TryParse(element)) != null)
                 return factory;
             
             return factory!;
