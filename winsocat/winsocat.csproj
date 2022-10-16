@@ -8,6 +8,7 @@
         <IsPackable>true</IsPackable>
         <PackAsTool>true</PackAsTool>
         <AssemblyName>winsocat</AssemblyName>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         
         <RootNamespace>Firejox.App.WinSocat</RootNamespace>
     </PropertyGroup>
