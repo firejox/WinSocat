@@ -8,11 +8,12 @@ jobs:
   build_and_publish:
     runs-on: windows-latest
     steps:
-      - name: Obtain release semantic version
-        id: semver
-        uses: Steffo99/actions-semver@v0.3.4
+      - name: Retrieve version
+        uses: actions/github-script@v6
+        id: get-version
         with:
-          string: ${{ github.event.release.tag_name }}
+          result-encoding: string
+          script: return context.payload.release.tag_name.substring(1) # remove `v`
       - uses: actions/checkout@v3
       - name: Setup .Net 6.0
         uses: actions/setup-dotnet@v3
@@ -21,17 +22,17 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build WinSocat
-        run: dotnet build -c Release --no-restore -p:Version=${{ steps.semver.outputs.core }} --version-suffix ${{ steps.semver.outputs.prerelease }}
+        run: dotnet build -c Release --no-restore -p:Version=${{ steps.get-version.outputs.result }}
       - name: Pack WinSocat into nuget package
-        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{ steps.semver.outputs.core }} --version-suffix ${{ steps.semver.outputs.prerelease }}
+        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{ steps.get-version.outputs.result }}
       - name: Upload package to release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./winsocat.${{ steps.semver.outputs.core }}.nupkg
-          asset_name: winsocat.${{ steps.semver.outputs.core }}.nupkg
+          asset_path: ./winsocat.${{ steps.get-version.outputs.result }}.nupkg
+          asset_name: winsocat.${{ steps.get-version.outputs.result }}.nupkg
           asset_content_type: application/octet-stream
       - name: Push package to nuget.org
-        run:  dotnet nuget push *.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run:  dotnet nuget push winsocat.${{ steps.get-version.outputs.result }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
