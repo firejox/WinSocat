@@ -2,7 +2,7 @@
 
 on:
   release:
-    types: [published, released]
+    types: [published]
     
 jobs:
   build_and_publish:
