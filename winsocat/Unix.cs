@@ -31,7 +31,7 @@ public class UnixSocketListenPiperInfo
 
     public static UnixSocketListenPiperInfo TryParse(AddressElement element)
     {
-        if (!element.Tag.Equals("UNIX-LISTEN", StringComparison.OrdinalIgnoreCase)) return null;
+        if (!element.Tag.Equals("UNIX-LISTEN", StringComparison.OrdinalIgnoreCase)) return null!;
         return new UnixSocketListenPiperInfo(new UnixDomainSocketEndPoint(element.Address));
     }
 }
