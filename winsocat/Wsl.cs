@@ -2,7 +2,8 @@
 
 public class WslPiperInfo
 {
-    private static readonly bool WslCheck = File.Exists(Path.Join(Environment.SystemDirectory, "wsl.exe"));
+    private static readonly string WslPath = Path.Join(Environment.SystemDirectory, "wsl.exe");
+    private static readonly bool WslCheck = File.Exists(WslPath);
     private readonly string _command;
     public string Command => _command;
 
@@ -35,7 +36,7 @@ public class WslPiperInfo
 
         arguments += _command;
 
-        return new ProcPiperInfo(@" C:\Windows\System32\wsl.exe", arguments);
+        return new ProcPiperInfo(WslPath, arguments);
     }
 
     public static WslPiperInfo TryParse(AddressElement element)
