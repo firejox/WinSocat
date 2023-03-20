@@ -38,6 +38,6 @@ public class UnixSocketListenPiperInfoTest
     public string PathPatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        return UnixSocketListenPiperInfo.TryParse(element).EndPoint.ToString();
+        return UnixSocketListenPiperInfo.TryParse(element).EndPoint.ToString()!;
     }
 }

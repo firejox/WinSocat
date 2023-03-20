@@ -212,7 +212,7 @@ public class PiperStrategyTest
                         writer.Write("Bar");
                         writer.Flush();
                         
-                        tcs.SetResult(reader.ReadLine());
+                        tcs.SetResult(reader.ReadLine()!);
                     }
                 }
             }

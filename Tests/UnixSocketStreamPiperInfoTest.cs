@@ -37,6 +37,6 @@ public class UnixSocketStreamPiperInfoTest
     public string PathPatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);
-        return UnixSocketStreamPiperInfo.TryParse(element).EndPoint.ToString();
+        return UnixSocketStreamPiperInfo.TryParse(element).EndPoint.ToString()!;
     }
 }
