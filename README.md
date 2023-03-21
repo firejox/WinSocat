@@ -25,9 +25,9 @@ The WinSocat is accept two address pattern
 winsocat.exe [address1] [address2]
 ```
 
-The `address1` can accept `STDIO`, `TCP-LISTEN`, `TCP`, `NPIPE`, `NPIPE-LISTEN`, `EXEC`, `WSL`, `UNIX`, `UNIX-LISTEN` socket types.
+The `address1` can accept `STDIO`, `TCP-LISTEN`, `TCP`, `NPIPE`, `NPIPE-LISTEN`, `EXEC`, `WSL`, `UNIX`, `UNIX-LISTEN`, `HVSOCK`, `HVSOCK-LISTEN` socket types.
 
-The `address2` can accept `STDIO`, `TCP`, `NPIPE`, `EXEC`, `WSL`, `UNIX` socket types.
+The `address2` can accept `STDIO`, `TCP`, `NPIPE`, `EXEC`, `WSL`, `UNIX`, `HVSOCK` socket types.
 
 ## Examples
 
@@ -80,3 +80,21 @@ winsocat NPIPE-LISTEN:fooPipe WSL:"socat STDIO unix-connect:foo.sock"
 ```
 socat unix-listen:foo.sock,fork EXEC:"/path/to/winsocat.exe STDIO NPIPE:fooPipe"
 ```
+
+### HyperV Socket Support
+
+WinSocat is also allow to interact with hyper-v socket. It requires the vmId and serviceId to connect. For example, you can use this
+
+```
+winsocat stdio hvsock:0cb41c0b-fd26-4a41-8370-dccb048e216e:00000ac9-facb-11e6-bd58-64006a7986d3
+```
+
+to connect the VSOCK socket opened by WSL2 program. This program is running under the HyperV-VM with vmId `0cb41c0b-fd26-4a41-8370-dccb048e216e`. 
+And it opens the VSOCK port 2761(the hex format is 0x00000ac9). According to [hyper-v on windows](https://learn.microsoft.com/en-us/virtualization/hyper-v-on-windows/user-guide/make-integration-service),
+the VSOCK port on Linux will be equivalent to the serviceId `[port in hex]-facb-11e6-bd58-64006a7986d3` on windows. Hence, WinSocat provide the short representation for VSOCK.
+
+```
+winsocat stdio hvsock:0cb41c0b-fd26-4a41-8370-dccb048e216e:vsock-2761
+```
+
+This `vsock-2761` will be viewed as the serviceId `00000ac9-facb-11e6-bd58-64006a7986d3`.
