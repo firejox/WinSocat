@@ -25,9 +25,9 @@ The WinSocat is accept two address pattern
 winsocat.exe [address1] [address2]
 ```
 
-The `address1` can accept `STDIO`, `TCP-LISTEN`, `TCP`, `NPIPE`, `NPIPE-LISTEN`, `EXEC`, `WSL`, `UNIX`, `UNIX-LISTEN`, `HVSOCK`, `HVSOCK-LISTEN` socket types.
+The `address1` can accept `STDIO`, `TCP-LISTEN`, `TCP`, `NPIPE`, `NPIPE-LISTEN`, `EXEC`, `WSL`, `UNIX`, `UNIX-LISTEN`, `HVSOCK`, `HVSOCK-LISTEN`, `SP` socket types.
 
-The `address2` can accept `STDIO`, `TCP`, `NPIPE`, `EXEC`, `WSL`, `UNIX`, `HVSOCK` socket types.
+The `address2` can accept `STDIO`, `TCP`, `NPIPE`, `EXEC`, `WSL`, `UNIX`, `HVSOCK`, `SP` socket types.
 
 ## Examples
 
@@ -98,3 +98,26 @@ winsocat stdio hvsock:0cb41c0b-fd26-4a41-8370-dccb048e216e:vsock-2761
 ```
 
 This `vsock-2761` will be viewed as the serviceId `00000ac9-facb-11e6-bd58-64006a7986d3`.
+
+### Serial Port Support
+
+WinSocat can relay the data of serial port. For example,
+
+```
+winsocat sp:COM1,baudrate=12500,parity=1,databits=16,stopbits=0 stdio
+```
+
+The `baudrate`, `parity`, `databits` and `stopbits` is optional parameter. Another example is to integrate
+with [com0com](https://sourceforge.net/projects/com0com/).
+
+1. Assume you have already created paired com port `COM5 <=> COM6` via [com0com](https://sourceforge.net/projects/com0com/).
+2. Execute the command at terminal
+```
+winsocat sp:COM5 stdio
+```
+3. Execute the command at another terminal
+```
+winsocat sp:COM6 stdio
+```
+
+Now these two terminals can interact with each other.

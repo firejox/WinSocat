@@ -73,6 +73,9 @@ namespace Firejox.App.WinSocat
             if ((strategy = HyperVListenPiperStrategy.TryParse(element)) != null)
                 return strategy;
 
+            if ((strategy = SerialPortPiperStrategy.TryParse(element)) != null)
+                return strategy;
+
             return strategy!;
         }
 
@@ -104,6 +107,9 @@ namespace Firejox.App.WinSocat
                 return factory;
 
             if ((factory = HyperVStreamPiperFactory.TryParse(element)) != null)
+                return factory;
+
+            if ((factory = SerialPortPiperFactory.TryParse(element)) != null)
                 return factory;
 
             return factory!;
