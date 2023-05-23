@@ -23,9 +23,17 @@ jobs:
         run: dotnet restore
       - name: Build WinSocat
         run: dotnet build -c Release --no-restore -p:Version=${{ steps.get-version.outputs.result }}
-      - name: Pack WinSocat into nuget package
-        run: dotnet pack -c Release --no-build -o . -p:PackageVersion=${{ steps.get-version.outputs.result }}
-      - name: Upload package to release assets
+      - name: Pack WinSocat into several distribution
+        run: >
+          dotnet pack -c Release --no-build -o . -p:PackageVersion=${{ steps.get-version.outputs.result }} &&
+          dotnet publish winsocat -c Release -r win-x86 -p:PublishDir=../build/x86 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishReadyToRun=true -p:PublishTrimmed=true -p:Version=${{ steps.get-version.outputs.result }} --self-contained true &&
+          dotnet publish winsocat -c Release -r win-x64 -p:PublishDir=../build/x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishReadyToRun=true -p:PublishTrimmed=true -p:Version=${{ steps.get-version.outputs.result }} --self-contained true &&
+          dotnet publish winsocat -c Release -r win-arm64 -p:PublishDir=../build/arm64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishReadyToRun=true -p:PublishTrimmed=true -p:Version=${{ steps.get-version.outputs.result }} --self-contained true &&
+          tar -acvf winsocat-portable-x86.${{ steps.get-version.outputs.result }}.zip build\x86\winsocat.exe &&
+          tar -acvf winsocat-portable-x64.${{ steps.get-version.outputs.result }}.zip build\x64\winsocat.exe &&
+          tar -acvf winsocat-portable-arm64.${{ steps.get-version.outputs.result }}.zip build\arm64\winsocat.exe
+          
+      - name: Upload nupkg to release assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -34,5 +42,32 @@ jobs:
           asset_path: ./winsocat.${{ steps.get-version.outputs.result }}.nupkg
           asset_name: winsocat.${{ steps.get-version.outputs.result }}.nupkg
           asset_content_type: application/octet-stream
+      - name: Upload x86 zip to release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./winsocat-portable-x86.${{ steps.get-version.outputs.result }}.zip
+          asset_name: winsocat-portable-x86.${{ steps.get-version.outputs.result }}.zip
+          asset_content_type: application/zip
+      - name: Upload x64 zip to release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./winsocat-portable-x64.${{ steps.get-version.outputs.result }}.zip
+          asset_name: winsocat-portable-x64.${{ steps.get-version.outputs.result }}.zip
+          asset_content_type: application/zip
+      - name: Upload arm64 zip to release assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./winsocat-portable-arm64.${{ steps.get-version.outputs.result }}.zip
+          asset_name: winsocat-portable-arm64.${{ steps.get-version.outputs.result }}.zip
+          asset_content_type: application/zip
       - name: Push package to nuget.org
         run:  dotnet nuget push winsocat.${{ steps.get-version.outputs.result }}.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
