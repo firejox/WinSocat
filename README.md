@@ -10,11 +10,19 @@
 WinSocat is a socat-like program specific on Windows platform. It can bridge Windows named pipe and other general I/O, e.g., STDIO, TCP, the STDIO of Process.
 
 ## Installation
+There are several ways to install WinSocat.
 
+### .NET CLI
 [Install .NET 6 or newer](https://get.dot.net) and install via `dotnet tool`
 
 ```
 dotnet tool install -g winsocat
+```
+
+### Windows Package Manager
+Install via `winget`
+```
+winget install -e --id Firejox.WinSocat
 ```
 
 ## Command Form
