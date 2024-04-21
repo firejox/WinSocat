@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.IO.Pipelines;
+using System.CommandLine.Parsing;
 
 namespace Firejox.App.WinSocat;
 
@@ -20,25 +21,14 @@ public class ProcPiperInfo
     public static ProcPiperInfo TryParse(AddressElement element)
     {
         if (!element.Tag.Equals("EXEC", StringComparison.OrdinalIgnoreCase)) return null!;
-        
-        string execPattern = element.Address.Trim('\'', '\"');
-        int sepIndex = execPattern.IndexOf(' ');
-        string filename;
-        string arguments;
-
-        if (sepIndex != -1)
-        {
-            filename = execPattern.Substring(0, sepIndex);
-            arguments = execPattern.Substring(sepIndex + 1);
-        }
-        else
-        {
-            filename = execPattern;
-            arguments = "";
-        }
+        var execPattern = element.Address;
+        var cmdLine = CommandLineStringSplitter.Instance.Split(execPattern);
+        string filename = cmdLine.First();
+        string arguments = String.Join(' ', cmdLine.Skip(1));
 
         return new ProcPiperInfo(filename, arguments);
     }
+
 }
 
 public class ProcPiper : IPiper
