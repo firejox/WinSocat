@@ -34,6 +34,7 @@ public class ProcPiperInfoTest
 
     [TestCase(@"EXEC:C:\Foo.exe bar", ExpectedResult = @"C:\Foo.exe")]
     [TestCase(@"EXEC:C:\Foo.exe", ExpectedResult = @"C:\Foo.exe")]
+    [TestCase(@"EXEC:""C:\foo\space dir\bar.exe"" arg1 arg2", ExpectedResult = @"C:\foo\space dir\bar.exe")]
     public string FileNamePatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);
@@ -41,6 +42,7 @@ public class ProcPiperInfoTest
     }
 
     [TestCase(@"EXEC:C:\Foo.exe bar1 bar2", ExpectedResult = "bar1 bar2")]
+    [TestCase(@"EXEC:""C:\foo\space dir\bar.exe"" arg1 arg2", ExpectedResult = @"arg1 arg2")]
     public string ArgumentPatternMatchTest(string input)
     {
         var element = AddressElement.TryParse(input);

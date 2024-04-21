@@ -36,7 +36,7 @@ public class AddressElement
             return null!;
 
         string tag = tagSplits[0];
-        string address = tagSplits[1].Substring(0, addressSepOffset);
+        string address = tagSplits[1].Substring(0, addressSepOffset).Trim();
         var options = GetOptions(tagSplits[1].Substring(addressSepOffset));
         
         return new AddressElement(tag, address, options);
